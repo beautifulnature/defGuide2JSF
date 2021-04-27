@@ -17,10 +17,6 @@ public class HelloWorldDb {
 	private Message message = new Message();
 	private List<Message> messages;
 	
-	public HelloWorldDb() {
-		super();
-	}
-
 	@Inject
 	private MessageService messageService;
 	
