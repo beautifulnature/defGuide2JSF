@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+	<title>Test</title>
+	<script>var mynamespace = mynamespace || {};</script>
+	<!-- <h:outputStylesheet library="font-awesome" name="css/fontawesome.min.css" /> -->
+	<h:outputStylesheet name="font-awesome/css/fontawesome.min.css" />
+</h:head>
+<h:body>
+	<h1>Test</h1>
+	<h:form>
+		<h:inputText id="text" value="#{bean.text}" />
+		<h:inputSecret id="password" value="#{bean.password}" />
+		<h:inputTextarea id="message" value="#{bean.message}" />
+		<h:inputHidden id="hidden" value="#{bean.hidden}" />
+		<h:commandButton id="submit" value="Submit" action="#{bean.submit}" />
+	</h:form>
+	<h:form id="fform" enctype="multipart/form-data">
+		<h:inputFile id="file" value="#{bean.file}" />
+		<h:commandButton id="submit" value="Submit" action="#{bean.fsubmit}" />
+	</h:form>
+	<h:form id="sform">
+		<h:selectBooleanCheckbox id="checked" value="#{bean.checked}" />
+		<h:selectOneMenu id="oneMenu" value="#{bean.oneMenu}">
+			<f:selectItems value="#{bean.availableItems}" />
+		</h:selectOneMenu>
+		<h:selectOneRadio id="oneRadio" value="#{bean.oneRadio}">
+			<f:selectItems value="#{bean.availableItems}" />
+		</h:selectOneRadio>
+		<h:selectManyListbox id="manyListbox" value="#{bean.manyListbox}">
+			<f:selectItems value="#{bean.availableItems}" />
+		</h:selectManyListbox>
+		<h:selectManyCheckbox id="manyCheckbox" value="#{bean.manyCheckbox}">
+			<f:selectItems value="#{bean.availableItems}" />
+		</h:selectManyCheckbox>
+		<ul>
+			<ui:repeat id="many" value="#{bean.availableItems}" var="item">
+				<li>
+					<h:selectBooleanCheckbox id="checkbox" value="#{bean.manyCheckboxMap[item]}" />
+					<h:outputLabel for="checkbox" value="#{item}" />
+				</li>
+			</ui:repeat>
+		</ul>
+		<ul>
+			<ui:repeat id="one" value="#{bean.availableItems}" var="item">
+				<li>
+					<h:selectOneRadio id="radio" group="groupName" value="#{bean.oneRadio1}">
+						<f:selectItem itemValue="#{item}" />
+					</h:selectOneRadio>
+					<h:outputLabel for="radio" value="#{item}" />
+				</li>
+			</ui:repeat>
+		</ul>
+		<h:selectOneMenu id="selectedItem" value="#{bean.selectedItem}" hideNoSelectionOption="true">
+			<f:selectItem itemValue="#{null}" itemLabel="-- select one --" noSelectionOption="true" />
+			<f:selectItems value="#{bean.availableItems2.entrySet()}" var="entry" 
+				itemValue="#{entry.key}" itemLabel="#{entry.value}">
+			</f:selectItems>
+		</h:selectOneMenu>
+		<h:commandButton id="submit" value="Submit"
+			actionListener="#{bean.collectCheckedValues}"
+			action="#{bean.ssubmit}" />
+	</h:form>
+	<h:form id="login">
+		<fieldset>
+			<legend>Login</legend>
+			<section>
+				<h:outputLabel for="email" value="Email address" />
+				<h:inputText id="email" value="#{login.email}" required="true" />
+				<h:message id="m_email" for="email" />
+			</section>
+			<section>
+				<h:outputLabel for="password" value="Password" />
+				<h:inputSecret id="password" value="#{login.password}" required="true" />
+				<h:message id="m_password" for="password" />
+			</section>
+			<footer>
+				<h:commandButton id="submit" value="Login" action="#{login.submit}" />
+				<!-- <h:message id="m_submit" for="submit" /> -->
+				<h:messages id="messages" globalOnly="true" rendered="#{component.namingContainer.submitted}" />
+			</footer>
+		</fieldset>
+	</h:form>
+	<h:form id="clform">
+		<h:commandLink id="submit" value="Submit" action="#{bean.clsubmit}" />
+	</h:form>
+	<h:form id="cbform">
+		<h:commandButton id="submit1" value="Submit1" action="#{bean.cbsubmit}">
+			<f:param name="id" value="#{bean.id}" />
+		</h:commandButton>
+		<h:commandButton id="submit2" value="Submit2" action="#{bean.cbsubmit(bean.id)}"/>
+	</h:form>
+	<h:form id="jsform">
+		<h:commandScript id="submit" name="mynamespace.invokeBeanSubmit" action="#{bean.ibsubmit}" />
+	</h:form>
+	<h:panelGroup layout="block" id="lazyPersonsPanel">
+		<h:dataTable rendered="#{not empty bean.lazyPersons}" value="#{bean.lazyPersons}" var="person">
+			<h:column>#{person.id}</h:column>
+			<h:column>#{person.name}</h:column>
+			<h:column>#{person.email}</h:column>
+		</h:dataTable>
+	</h:panelGroup>
+	<h:form id="lform">
+		<h:commandScript id="loadLazyPersons" name="loadLazyPersons" autorun="true" 
+			action="#{bean.loadLazyPersons}" render=":lazyPersonsPanel">
+		</h:commandScript>
+	</h:form>
+	<h:form id="delete">
+		<h:commandLink value="link" id="delete" action="#{bean.delete}" >
+			<i class="fa fa-trash" />
+		</h:commandLink>
+	</h:form>
+	<script>
+		var params = {
+			jsid: 42,
+			name: "John Doe",
+			email: "john.doe@example.com"
+		};
+		mynamespace.invokeBeanSubmit(params);
+	</script>
+</h:body>
+</html>
